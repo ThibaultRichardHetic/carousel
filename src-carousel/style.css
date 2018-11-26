@@ -16,3 +16,59 @@
     width: 100%;
     height: 100%;
 }
+
+/**
+ * Siblings
+ */
+.hetic-carousel .sibling
+{
+    display: flex;
+    position: absolute;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background: #00000022;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    will-change: opacity;
+}
+
+.hetic-carousel:hover .sibling
+{
+    opacity: 1;
+}
+
+.hetic-carousel .sibling.previous
+{
+    left: 0;
+}
+
+.hetic-carousel .sibling.next
+{
+    right: 0;
+}
+
+.hetic-carousel .sibling::after
+{
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-top: 2px solid #ffffff;
+    border-right: 2px solid #ffffff;
+}
+
+.hetic-carousel .sibling.previous::after
+{
+    transform: translateX(6px) rotate(-135deg)
+}
+
+.hetic-carousel .sibling.next::after
+{
+    transform: translateX(-6px) rotate(45deg)
+}
