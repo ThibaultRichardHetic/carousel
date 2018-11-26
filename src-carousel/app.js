@@ -6,6 +6,10 @@ class HeticCarousel
         
         this.setSlides()
         this.setSiblings()
+        this.setAuto()
+        this.setPagination()
+
+        this.goTo(0)
     }
 
     setSlides()
@@ -45,6 +49,71 @@ class HeticCarousel
         })
     }
 
+    setAuto()
+    {
+        this.auto = {}
+        this.auto.active = !!this.$container.dataset.auto
+
+        // Auto not active
+        if(!this.auto.active)
+        {
+            return
+        }
+
+        this.auto.start = () =>
+        {
+            this.auto.interval = window.setInterval(() =>
+            {
+                this.next()
+            }, 2000)
+        }
+
+        this.auto.stop = () =>
+        {
+            window.clearInterval(this.auto.interval)
+        }
+
+        this.$container.addEventListener('mouseenter', () =>
+        {
+            this.auto.stop()
+        })
+        this.$container.addEventListener('mouseleave', () =>
+        {
+            this.auto.start()
+        })
+
+        this.auto.start()
+    }
+
+    setPagination()
+    {
+        this.pagination = {}
+        this.pagination.active = !!this.$container.dataset.pagination
+
+        // Pagination not active
+        if(!this.pagination.active)
+        {
+            return
+        }
+
+        // Create DOM
+        this.pagination.$container = document.createElement('div')
+        this.pagination.$container.classList.add('pagination')
+        this.$container.appendChild(this.pagination.$container)
+
+        for(let i = 0; i < this.slides.$items.length; i++)
+        {
+            const $page = document.createElement('button')
+            $page.classList.add('page')
+            this.pagination.$container.appendChild($page)
+
+            $page.addEventListener('click', () =>
+            {
+                this.goTo(i)
+            })
+        }
+    }
+
     previous()
     {
         let index = this.slides.index - 1
@@ -66,12 +135,36 @@ class HeticCarousel
             index = 0
         }
 
+        // const index = this.slides.index + 1 > this.slides.$items.length - 1 ? 0 : this.slides.index + 1
+        
         this.goTo(index)
     }
 
     goTo(_index)
     {
-        console.log(_index)
+        // Update slides classes
+        for(let i = 0; i < this.slides.$items.length; i++)
+        {
+            const $slide = this.slides.$items[i]
+
+            if(i < _index)
+            {
+                $slide.classList.add('is-before')
+                $slide.classList.remove('is-current', 'is-after')
+            }
+            else if(i === _index)
+            {
+                $slide.classList.add('is-current')
+                $slide.classList.remove('is-before', 'is-after')
+            }
+            else
+            {
+                $slide.classList.add('is-after')
+                $slide.classList.remove('is-before', 'is-current')
+            }
+        }
+
+        // Save index
         this.slides.index = _index
     }
 }
