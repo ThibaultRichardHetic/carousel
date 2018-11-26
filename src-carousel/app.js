@@ -101,6 +101,8 @@ class HeticCarousel
         this.pagination.$container.classList.add('pagination')
         this.$container.appendChild(this.pagination.$container)
 
+        this.pagination.$pages = []
+
         for(let i = 0; i < this.slides.$items.length; i++)
         {
             const $page = document.createElement('button')
@@ -111,6 +113,8 @@ class HeticCarousel
             {
                 this.goTo(i)
             })
+
+            this.pagination.$pages.push($page)
         }
     }
 
@@ -161,6 +165,24 @@ class HeticCarousel
             {
                 $slide.classList.add('is-after')
                 $slide.classList.remove('is-before', 'is-current')
+            }
+        }
+
+        // Update pagination classes
+        if(this.pagination.active)
+        {
+            for(let i = 0; i < this.pagination.$pages.length; i++)
+            {
+                const $page = this.pagination.$pages[i]
+
+                if(i === _index)
+                {
+                    $page.classList.add('is-active')
+                }
+                else
+                {
+                    $page.classList.remove('is-active')
+                }
             }
         }
 
